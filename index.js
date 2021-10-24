@@ -55,6 +55,22 @@ async function run() {
             res.json(result)
             console.log(`A document was inserted with the _id: ${result.insertedId}`);
         })
+        //put api update
+        app.put('/users/:id', async(req, res) =>{
+            const id = req.params.id;
+            const updatedUser = req.body;
+            const filter = {_id: ObjectId(id)};
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    name: updatedUser.name,
+                    email: updatedUser.email
+                },
+            };
+            const result = await users.updateOne(filter, updateDoc, options)
+            console.log('hitting database put', req);
+            res.json(result)
+        })
 
         app.get('/users/:id', async (req, res) =>{
             const id = req.params.id;
